@@ -21,13 +21,22 @@ export default {
       },
     },
   },
+  data() {
+    return {
+      isloaded: true
+    }
+  },
   components: {
     Swiper,
     SwiperItem,
   },
   methods: {
     swiperLoaded() {
-      this.$emit('swiperImgLoaded');
+      if (this.isloaded) {
+        this.$emit('swiperImgLoaded');
+        // 只需要发送一次就够了
+        this.isloaded = false;
+      }
     }
   }
 };

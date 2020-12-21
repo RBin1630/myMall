@@ -1,13 +1,11 @@
 <template>
-  <div class="goods-item">
-    <a :href="item.link">
-      <img :src="item.show.img" alt="" @load="imgLoaded" />
+  <div class="goods-item" @click="GoodsItemClick">
+      <img :src="showImage" alt="" @load="imgLoaded" />
       <div class="goods-info">
         <p>{{ item.title }}</p>
         <span class="price">{{ item.orgPrice }}</span> ♥
         <span class="collect">{{ item.cfav }}</span>
       </div>
-    </a>
   </div>
 </template>
 
@@ -22,9 +20,17 @@ export default {
       },
     },
   },
+  computed: {
+    showImage() {
+      return this.item.image || this.item.show.img;
+    }
+  },
   methods: {
     imgLoaded() {
       this.$bus.$emit('itemImgLoaded');
+    },
+    GoodsItemClick() {
+      this.$router.push('/details/' + this.item.iid);
     }
   }
 };
