@@ -16,10 +16,17 @@
 
       <goods-list ref="recommend" class="recommend" :list="recommend"></goods-list>
     </scroll>
+    <!-- 返回顶部按钮 -->
+    <back-top @click.native="topClick" v-show="isShowTop"></back-top>
+
+    <!-- 底部功能模块 -->
+    <details-bottom-bar @addToCart="addToCart"></details-bottom-bar>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import detailsNavBar from "./childCpn/detailsNavBar";
 import detailsSwiper from "./childCpn/detailsSwiper";
 import detailsBaseInfo from "./childCpn/detailsBaseInfo";
@@ -27,18 +34,19 @@ import detailsShopInfo from "./childCpn/detailsShopInfo";
 import detailsGoodsInfo from './childCpn/detailsGoodsInfo';
 import detailsParamsInfo from './childCpn/detailsParamsInfo';
 import detailsCommentInfo from './childCpn/detailsCommentInfo';
+import detailsBottomBar from './childCpn/detailsBottomBar';
 
 import Scroll from "components/common/scroll/Scroll";
 import GoodsList from 'components/content/goods/GoodsList';
 
 // import {debounce} from 'common/utils';
-import {imgLoadedMixin} from 'common/mixin';
+import {imgLoadedMixin, backTopMixin} from 'common/mixin';
 
 import { getDetailsData, detailGoods, shopInfo, getRecommend } from "network/details";
 
 export default {
   name: "Details",
-  mixins: [imgLoadedMixin],
+  mixins: [imgLoadedMixin, backTopMixin],
   components: {
     Scroll,
     detailsNavBar,
@@ -49,10 +57,12 @@ export default {
     detailsParamsInfo,
     detailsCommentInfo,
     GoodsList,
+    detailsBottomBar,
   },
   data() {
     return {
       iid: null,
+      // 保存轮播图的数据
       topImages: [],
       detailsData: {},
       shopInfo: {},
@@ -76,7 +86,7 @@ export default {
 
     // 获取详情页数据
     getDetailsData(this.iid).then((res) => {
-      // console.log(res);
+      console.log(res.result);
       const data = res.result;
       // 保存详情页的轮播图图片
       this.topImages = data.itemInfo.topImages;
@@ -87,7 +97,9 @@ export default {
         data.columns,
         data.shopInfo
       );
+      // console.log(this.detailsData);
       this.shopInfo = new shopInfo(data.shopInfo);
+
       // 保存商品详情数据
       this.detailsInfo = data.detailInfo;
       
@@ -103,7 +115,7 @@ export default {
 
     // 获取详情页推荐数据
     getRecommend().then(res => {
-      console.log(res.data.list);
+      // console.log(res.data.list);
       this.recommend = res.data.list;
     })
   },
@@ -113,6 +125,10 @@ export default {
     this.$bus.$off('itemImgLoaded', this.imgLoaded);
   },
   methods: {
+    ...mapActions({
+      cartAdd: 'addToCart',
+    }),
+
     // 详情页商品的图片加载传过来的自定义事件的方法
     imgLoad() {
       this.$refs.scroll.refresh();
@@ -137,7 +153,34 @@ export default {
           this.currentIndex = i;
           this.$refs.nav.currentIndex = this.currentIndex;
         }
-      }
+      };
+      // 当拉到1000的位置就把isShowTop设置为true
+      this.isShowTop = (-position.y) > 1000;
+    },
+    topClick() {
+      // 实现点击回到顶部
+      this.$refs.scroll.scrollTo(0, 0, 500);
+    },
+    addToCart() {
+      // 将商品添加到购物车
+      // 把购物车需要展示的数据保存到一个对象中
+      const cartInfo = {};
+      cartInfo.iid = this.iid;
+      cartInfo.img = this.topImages[0];
+      cartInfo.title = this.detailsData.title;
+      cartInfo.desc = this.detailsInfo.desc;
+      cartInfo.realPrice = this.detailsData.realPrice;
+      // console.log(cartInfo);
+      // 分发到actions
+      // this.$store.dispatch('addToCart', cartInfo).then(res => {
+      //   // actions 返回一个promise实例 告诉我们该操作已经成功
+      //   // 操作成功后要显示一个弹窗
+      //   console.log(res);
+      // })
+      this.cartAdd(cartInfo).then(res => {
+        // console.log(this.$toast);
+        this.$toast.showToast(res);
+      })
     }
   },
 };

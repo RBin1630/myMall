@@ -16,7 +16,7 @@ export default {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: 0px;
+    bottom: 0;
     background-clip: #f6f6f6;
     background-color: #f6f6f6;
     font-size: 14px;

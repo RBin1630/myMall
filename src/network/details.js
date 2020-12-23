@@ -21,7 +21,7 @@ export class detailGoods {
     this.discountDesc = itemInfo.discountDesc;
     this.price = itemInfo.price;
     this.oldPrice = itemInfo.oldPrice;
-
+    this.realPrice = itemInfo.lowNowPrice;
     this.columns = columns;
 
     this.services = shopInfo.services;

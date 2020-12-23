@@ -55,16 +55,15 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabControl/TabControl";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import backTop from "components/common/backtop/backTop";
 // import {debounce} from 'common/utils';
-import {imgLoadedMixin} from 'common/mixin';
+import {imgLoadedMixin, backTopMixin} from 'common/mixin';
 
 // 网络请求导入
 import { getHomeMultidata, getHomeGoods } from "network/home";
 
 export default {
   name: "home",
-  mixins: [imgLoadedMixin],
+  mixins: [imgLoadedMixin, backTopMixin],
   data() {
     return {
       banners: [],
@@ -75,7 +74,6 @@ export default {
         sell: { page: 0, list: [] },
       },
       currentType: "pop",
-      isShowTop: false,
       tabControlTop: 0,
       isTabFixed: false,
       saveY: 0,
@@ -89,7 +87,6 @@ export default {
     TabControl,
     GoodsList,
     Scroll,
-    backTop,
   },
   created() {
     // 获取轮播图和推荐模块的数据

@@ -16,3 +16,15 @@ export const imgLoadedMixin = {
     }
   }
 }
+
+import backTop from "components/common/backtop/backTop";
+export const backTopMixin = {
+  components: {
+    backTop,
+  },
+  data() {
+    return {
+      isShowTop: false,
+    }
+  }
+}
