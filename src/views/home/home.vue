@@ -198,7 +198,7 @@ export default {
 }
 .fixed {
   position: fixed;
-  top: 0;
+  top: -1px;
   left: 0;
   right: 0;
 }

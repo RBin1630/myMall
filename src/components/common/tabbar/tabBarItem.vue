@@ -38,8 +38,9 @@ export default {
 <style>
   .tab-bar-item {
     flex: 1;
-    height: 49px;
+    height: 55px;
     text-align: center;
+    padding: 3px 0;
   }
   .tab-bar-item img {
     margin-top: 3px;

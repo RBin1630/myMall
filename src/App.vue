@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @mousewheel.prevent>
     <keep-alive exclude="Details">
       <router-view></router-view>
     </keep-alive>

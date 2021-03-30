@@ -20,6 +20,6 @@ export default {
     background-clip: #f6f6f6;
     background-color: #f6f6f6;
     font-size: 14px;
-    box-shadow: 0 -1px 3px rgba(100, 100, 100, .2);
+    box-shadow: 0 -1px 3px rgba(100, 100, 100, .3);
   }
 </style>
